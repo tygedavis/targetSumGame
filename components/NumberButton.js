@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
 	selectedContainer: {
 		padding: 10,
 		borderColor: '#0F0',
-		borderWidth: 5,
-		opacity: 0.3
+		borderWidth: 5
 	},
 	numberText: {
 		fontSize: 25,
