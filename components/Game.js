@@ -1,7 +1,15 @@
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
+import NumberButton from './NumberButton';
 
 export default function Game(props) {
+	const [selectedNumbers, handleSelectedNumbers] = React.useState([0, 4]);
+
+	const isNumberSelected = (numIdx) => { 
+		return selectedNumbers.indexOf(numIdx) >= 0; 
+	};
+
 	/* Creating an array of random numbers. */
 	const randomNumbers = Array
 		.from({ length: props.randomNumberCount })
@@ -13,13 +21,19 @@ export default function Game(props) {
 		.slice(0, props.randomNumberCount - 2,)
 		.reduce((acc, curr) => acc + curr, 0);
 
+	//TODO: Shuffle the random numbers
+
 	return (
 		<View style={styles.container}>
 			<Text style={styles.goalNumber}>{targetNum}</Text>
 			<View style={styles.numberContainer}>
 				{randomNumbers.map((num, idx) => {
 					return (
-						<Text style={styles.guessNum} key={idx}>{num}</Text>
+						<NumberButton 
+							key={idx} 
+							number={num}
+							isNumberSelected={isNumberSelected(idx)}
+						/>
 					);
 				})}
 			</View>
@@ -35,7 +49,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: 'skyblue',
-		paddingTop: 55
+		paddingTop: 155
 	},
 	goalNumber: {
 		backgroundColor: '#333366',
@@ -43,20 +57,11 @@ const styles = StyleSheet.create({
 		marginHorizontal: 50,
 		textAlign: 'center'
 	},
-
 	numberContainer: {
 		flex: 1,
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		justifyContent: 'space-around'
-	},
-	guessNum: {
-		backgroundColor: '#336666',
-		width: 100,
-		marginHorizontal: 45,
-		marginVertical: 40,
-		padding: 15,
-		fontSize: 25,
-		textAlign: 'center'
+		justifyContent: 'space-around',
+		marginTop: 40
 	}
 });
