@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 export default function NumberButton(props) {
 	const handlePress = () => {
-
+		if (!props.isNumberSelected) {
+			props.onPress([...props.selectedNumbers, props.id]);
+		}
 	};
 
 	return (
@@ -17,8 +19,11 @@ export default function NumberButton(props) {
 }
 
 NumberButton.propTypes = {
+	id: PropTypes.number.isRequired,
 	number: PropTypes.number.isRequired,
-	isNumberSelected: PropTypes.bool.isRequired
+	isNumberSelected: PropTypes.bool.isRequired,
+	onPress: PropTypes.func.isRequired,
+	selectedNumbers: PropTypes.array.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
 	selectedContainer: {
 		padding: 10,
 		borderColor: '#0F0',
-		borderWidth: 5
+		borderWidth: 5,
 	},
 	numberText: {
 		fontSize: 25,
