@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderColor: '#0F0',
 		borderWidth: 5,
+		opacity: 0.5
 	},
 	numberText: {
 		fontSize: 25,

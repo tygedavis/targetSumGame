@@ -28,9 +28,6 @@ export default function Game(props) {
 		setRandomNumbers(newRandomNumbers);
 	}, [targetNum]);
 
-	console.log('*** targetNum ***', targetNum);
-	console.log('*** selectedNumbers ***', selectedNumbers);	
-
 	//TODO: Shuffle the random numbers
 
 	return (
