@@ -12,6 +12,7 @@ export default function NumberButton(props) {
 		<TouchableOpacity 
 			style={[styles.container, props.isNumberSelected && styles.selectedContainer]}
 			onPress={handlePress}
+			disabled={ props.isNumberSelected }
 		>
 			<Text style={styles.numberText}>{props.number}</Text>
 		</TouchableOpacity>
@@ -35,10 +36,10 @@ const styles = StyleSheet.create({
 		padding: 15
 	},
 	selectedContainer: {
+		opacity: 0.5,
 		padding: 10,
 		borderColor: '#0F0',
-		borderWidth: 5,
-		opacity: 0.5
+		borderWidth: 5
 	},
 	numberText: {
 		fontSize: 25,
