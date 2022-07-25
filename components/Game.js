@@ -1,73 +1,34 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import NumberButton from './NumberButton';
 
 export default function Game(props) {
-    const [state, setState] = React.useState({
-        selectedNumbers: [],
-        randomNumbers: Array
-            .from({ length: props.randomNumberCount })
-            .map(() => 1 + Math.floor(Math.random() * 10)),
-        targetNum: 0,
-        status: 'new'
-    });
-
-    useEffect(() => {
-        setState({
-            ...state,
-            randomNumbers: Array
-                .from({ length: props.randomNumberCount })
-                .map(() => 1 + Math.floor(Math.random() * 10))
-        });
-    }, [state.status]);
-
-    const generateRandomNumbersArray = () => {
-        if (state.status === 'new') {
-            setState({
-                ...state,
-                targetNum: state.randomNumbers
-                    .slice(0, props.randomNumberCount - 3)
-                    .reduce((acc, curr) => acc + curr, 0),
-                status: 'playing'
-            });
-        }
-    };
-
-    generateRandomNumbersArray();
+    const [ selectedNumberIds, setSelectedNumbersIds ] = React.useState([]);
+    const [ randomNumbers ] = React.useState(Array
+        .from({ length: props.randomNumberCount })
+        .map(() => 1 + Math.floor(Math.random() * 10))
+    );
+    const [ targetNum ] = React.useState(randomNumbers
+        .slice(0, props.randomNumberCount - 3)
+        .reduce((acc, curr) => acc + curr, 0)
+    );
 
     const isNumberSelected = (numIdx) => { 
-        return state.selectedNumbers.indexOf(numIdx) >= 0; 
+        return selectedNumberIds.indexOf(numIdx) >= 0; 
     };
 
-    const handleSelectedNumbers = (num) => {
-        setState({
-            ...state,
-            selectedNumbers: [...state.selectedNumbers, num]
-        });
+    const handleSelectedNumbers = (id) => {
+        setSelectedNumbersIds([...selectedNumberIds, id]);
     };
-
-    const gameStatus = () => {
-        console.log('*** state.targetNum ***', state.targetNum);
-        const sumSelected = state.selectedNumbers.reduce((acc, curr) => {
-            return acc + state.randomNumbers[curr];
-        }, 0);
-        console.log('*** sumSelected ***', sumSelected);
-        
-        if (sumSelected === state.targetNum && state.status !== 'new') {
-            console.log('*** You did it! ***');
-        }
-    };
-
-    gameStatus();
 
     //TODO: Shuffle the random numbers
 
     return (
         <View style={styles.container}>
-            <Text style={styles.goalNumber}>{state.targetNum}</Text>
+            <Text style={styles.goalNumber}>{targetNum}</Text>
             <View style={styles.numberContainer}>
-                {state.randomNumbers.map((num, idx) => {
+                {randomNumbers.map((num, idx) => {
                     return (
                         <NumberButton 
                             key={idx}
@@ -75,7 +36,8 @@ export default function Game(props) {
                             number={num}
                             isNumberSelected={isNumberSelected(idx)}
                             onPress={handleSelectedNumbers}
-                            selectedNumbers={state.selectedNumbers}
+                            selectedNumbers={selectedNumberIds}
+                            // gameStatus={gameStatus}
                         />
                     );
                 })}
