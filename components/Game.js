@@ -22,6 +22,23 @@ export default function Game(props) {
         setSelectedNumbersIds([...selectedNumberIds, id]);
     };
 
+    const gameStatus = () => {
+        const sumSelected = selectedNumberIds.reduce((acc, curr) => {
+            return acc + randomNumbers[curr];
+        }, 0);
+        console.log('*** sumSelected ***', sumSelected);
+        
+        if (sumSelected > targetNum) {
+            return 'LOST';
+        }
+        
+        if (sumSelected === targetNum) {
+            return 'WON';
+        }
+        
+        return 'PLAYING';
+    };
+
     //TODO: Shuffle the random numbers
 
     return (
@@ -37,10 +54,10 @@ export default function Game(props) {
                             isNumberSelected={isNumberSelected(idx)}
                             onPress={handleSelectedNumbers}
                             selectedNumbers={selectedNumberIds}
-                            // gameStatus={gameStatus}
                         />
                     );
                 })}
+                <Text>{gameStatus()}</Text>
             </View>
         </View>
     );
