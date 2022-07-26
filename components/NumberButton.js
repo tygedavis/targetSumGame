@@ -10,9 +10,13 @@ export default function NumberButton(props) {
 
     return (
         <TouchableOpacity 
-            style={[styles.container, props.isNumberSelected && styles.selectedContainer]}
+            style={[
+                styles.container, 
+                props.isNumberSelected && styles.selectedContainer,
+                props.gameStatus() !== null && styles.selectedContainer
+            ]}
             onPress={handlePress}
-            disabled={ props.isNumberSelected }
+            disabled={ props.isNumberSelected || props.gameStatus() !== null }
         >
             <Text style={styles.numberText}>{props.number}</Text>
         </TouchableOpacity>
@@ -24,7 +28,8 @@ NumberButton.propTypes = {
     number: PropTypes.number.isRequired,
     isNumberSelected: PropTypes.bool.isRequired,
     onPress: PropTypes.func.isRequired,
-    selectedNumbers: PropTypes.array.isRequired
+    selectedNumbers: PropTypes.array.isRequired,
+    gameStatus: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

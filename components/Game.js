@@ -13,6 +13,7 @@ export default function Game(props) {
         .slice(0, props.randomNumberCount - 3)
         .reduce((acc, curr) => acc + curr, 0)
     );
+    const [ timeRemaining, setTimeRemaining ] = React.useState(10); 
 
     const isNumberSelected = (numIdx) => { 
         return selectedNumberIds.indexOf(numIdx) >= 0; 
@@ -26,8 +27,11 @@ export default function Game(props) {
         const sumSelected = selectedNumberIds.reduce((acc, curr) => {
             return acc + randomNumbers[curr];
         }, 0);
-        console.log('*** sumSelected ***', sumSelected);
         
+        if (timeRemaining === 0) {
+            return 'TIME RAN OUT';
+        }
+
         if (sumSelected > targetNum) {
             return 'LOST';
         }
@@ -35,15 +39,27 @@ export default function Game(props) {
         if (sumSelected === targetNum) {
             return 'WON';
         }
-        
-        return 'PLAYING';
+
+        return null;
     };
+
+    setTimeout(() => {
+        if (timeRemaining > 0 && gameStatus() === null) {
+            setTimeRemaining(timeRemaining - 1);
+        }
+
+        gameStatus();
+    }, 1000);
 
     //TODO: Shuffle the random numbers
 
     return (
         <View style={styles.container}>
-            <Text style={styles.goalNumber}>{targetNum}</Text>
+            <Text style={[
+                styles.goalNumber, 
+                (gameStatus() === 'LOST' || gameStatus() === 'TIME RAN OUT') && styles.goalNumberLost,
+                gameStatus() === 'WON' && styles.goalNumberWon
+            ]}>{targetNum}</Text>
             <View style={styles.numberContainer}>
                 {randomNumbers.map((num, idx) => {
                     return (
@@ -54,10 +70,13 @@ export default function Game(props) {
                             isNumberSelected={isNumberSelected(idx)}
                             onPress={handleSelectedNumbers}
                             selectedNumbers={selectedNumberIds}
+                            gameStatus={gameStatus}
                         />
                     );
                 })}
-                <Text>{gameStatus()}</Text>
+            </View>
+            <View style={styles.gameInfoContainer}>
+                <Text style={styles.timeRemaining}>{gameStatus() || `Time Left: ${timeRemaining}`}</Text>
             </View>
         </View>
     );
@@ -79,11 +98,26 @@ const styles = StyleSheet.create({
         marginHorizontal: 50,
         textAlign: 'center'
     },
+    goalNumberLost: {
+        backgroundColor: 'red'
+    },
+    goalNumberWon: {
+        backgroundColor: '#0F0'
+    },
     numberContainer: {
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
         marginTop: 40
+    },
+    gameInfoContainer: {
+        paddingBottom: 125,
+        marginHorizontal: 100,
+        width: 190
+    },
+    timeRemaining: {
+        textAlign: 'center',
+        fontSize: 25
     }
 });
