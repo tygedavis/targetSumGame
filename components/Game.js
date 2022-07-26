@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     gameInfoContainer: {
         paddingBottom: 125,
         marginHorizontal: 100,
-        width: 190
+        justifyContent: 'center'
     },
     timeRemaining: {
         textAlign: 'center',
